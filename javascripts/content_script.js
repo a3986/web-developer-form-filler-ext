@@ -47,6 +47,20 @@ $.fn.serializeForm = function () {
             }
         });
     });
+	
+	 this.each(function () {
+        $("px-data-table input[type=checkbox]", this).not('').each(function () {
+            var input = $(this);
+			var name="dataTableCheckbox";
+            var type = input.attr("type");
+			var value = this.checked ? "true" : "false";
+			 if (formparams[name] === undefined) {
+				formparams[name] = value;
+			} else {
+				formparams[name] += "," + value;
+			}
+        });
+    });
     return formparams;
 };
 

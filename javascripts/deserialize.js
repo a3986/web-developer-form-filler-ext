@@ -43,8 +43,20 @@
 				
                 var name = $current.attr("id");
                 name = (name) ? name : $current.attr("name");
-				
-                $currentSavedValue = keyValPairObject[name];
+				$currentSavedValue = keyValPairObject[name];
+				if(name=="celleditinput"){
+					var tempValue = keyValPairObject[name];
+					var arrTemp = tempValue.split(",");
+					$currentSavedValue = arrTemp[0];
+					if(arrTemp.length>1){
+						arrTemp = arrTemp.slice(1,arrTemp.length);
+					}
+					keyValPairObject[name]=arrTemp.join(",");
+				}
+				else{
+					$currentSavedValue = keyValPairObject[name];
+				}
+                
 
                 if (currentDom.disabled === true) {
                     return true;
@@ -112,7 +124,42 @@
 
             });
 
-            return $self;
+            
+			 $self.find("px-data-table input[type=checkbox]").not('')
+			.each(function (index) {
+                $current = $(this);
+                currentDom = $current.get(0);
+				
+					
+				
+                var name = "dataTableCheckbox";
+				$currentSavedValue = keyValPairObject[name];				
+				var tempValue = keyValPairObject[name];
+				var arrTemp = tempValue.split(",");
+				$currentSavedValue = arrTemp[0];
+				if(arrTemp.length>1){
+					arrTemp = arrTemp.slice(1,arrTemp.length);
+				}
+				keyValPairObject[name]=arrTemp.join(",");
+                if (currentDom.disabled === true) {
+                    return true;
+                }
+
+                if ($current.is('input:checkbox')) {
+                    if ($currentSavedValue !== undefined) {
+                        if (($current.val() === $currentSavedValue) || ($currentSavedValue === "true")) {
+                            $(this).attr('checked', true);
+                        } else {
+                            $(this).attr('checked', false);
+                        }
+                        triggerNativeEvent($current, 'change');
+                        triggerNativeEvent($current, 'blur');
+                    }
+                    return true;
+                }
+            });
+			
+			return $self;
         }
 
     });
